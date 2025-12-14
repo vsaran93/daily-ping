@@ -274,30 +274,40 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _otpInputs() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(6, (i) {
-        return Container(
-          width: 48,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          child: TextField(
-            controller: otpControllers[i],
-            focusNode: otpFocusNodes[i],
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            maxLength: 1,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(counterText: ''),
-            onChanged: (v) {
-              if (v.isNotEmpty && i < 5) {
-                otpFocusNodes[i + 1].requestFocus();
-              } else if (v.isEmpty && i > 0) {
-                otpFocusNodes[i - 1].requestFocus();
-              }
-            },
-          ),
-        );
-      }),
+    return LayoutBuilder(
+    builder: (context, constraints) {
+      const totalSpacing = 5 * 8; // spacing between boxes
+      final boxWidth = (constraints.maxWidth - totalSpacing) / 6;
+
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(6, (i) {
+          return Container(
+            width: boxWidth.clamp(40.0, 56.0),
+            margin: EdgeInsets.only(right: i < 5 ? 8 : 0),
+            child: TextField(
+              controller: otpControllers[i],
+              focusNode: otpFocusNodes[i],
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              maxLength: 1,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: const InputDecoration(
+                counterText: '',
+                contentPadding: EdgeInsets.symmetric(vertical: 14),
+              ),
+              onChanged: (v) {
+                if (v.isNotEmpty && i < 5) {
+                  otpFocusNodes[i + 1].requestFocus();
+                } else if (v.isEmpty && i > 0) {
+                  otpFocusNodes[i - 1].requestFocus();
+                }
+              },
+            ),
+          );
+        }),
+      );
+    },
     );
   }
 
