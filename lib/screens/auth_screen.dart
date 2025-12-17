@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:daily_ping/screens/caregiver_view.dart';
 import 'package:daily_ping/screens/elder_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,9 +87,15 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Timer(const Duration(seconds: 1), () {
       setState(() => isLoading = false);
+      widget.userType == 'elder' ? 
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const ElderView())
+      )
+      : 
+       Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const CaregiverView())
       );
     });
   }
